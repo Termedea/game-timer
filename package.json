@@ -1,0 +1,16 @@
+{
+  "name": "game-timer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch:sass": "node-sass --watch ./scss/ --output-style compressed -o ./styles/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compile-sass": "^1.1.1",
+    "node-sass": "^4.14.1"
+  }
+}

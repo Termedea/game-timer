@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Timer</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <div id="message" class="hidden message"></div>
+    <div class="settings-content" id="settingsContent">
+        <form class="base-settings" action="post">
+            <div class="form-label-pair">
+                <label for="num-players">Antal spelare:</label>
+                <select name="num-players" id="numPlayers" required="required">
+                    <option value="" disabled="disabled" selected="selected"></option>
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+            <div class="form-label-pair">
+                <label for="timer-type">Typ av timer:</label>
+                <select name="timer-type" id="timerType" required="required">
+                    <option value="total-time" selected="selected">Totalt</option>
+                    <option value="per-player-time">Per spelare</option>
+                </select>
+            </div>
+            <div class="form-label-pair">
+                <label for="time">Ange tid (minuter):</label>
+                <input type="number" id="time" name="time" required="required" value="45" />
+            </div>
+
+        </form>
+        <div class="btn-container">
+            <button id="saveSettings">Spara</button>
+        </div>
+
+        <form id="playerDetails" action="post">
+
+        </form>
+        <div class="btn-container hidden" id="btnContainer">
+            <button id="startGame" class="btn-start">Starta spelet</button>
+        </div>
+    </div>
+    <div class="game-content hidden" id="gameContent">
+        <h2 class="current-player" id="currentPlayerName"></h2>
+        <p class="time-left" id="timeLeft"></p>
+        <div class="btn-container" id="btnContainer">
+            <button id="nextPlayer" class="btn-next">Nästa spelare</button>
+        </div>
+    </div>
+    <script src="scripts/main.js">
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: $main-font-size;
+    font-family: "Alegreya Sans", "Gill Sans", "Gill Sans MT", Calibri,
+        "Trebuchet MS", sans-serif;
+    background: $main-color;
+    color: $sec-color;
+}
+h2 {
+    font-weight: normal;
+}
+.content {
+    max-width: 45em;
+    margin: 0 auto;
+    margin-top: 5em;
+}
+.message {
+    background: $red;
+    color: white;
+    padding: 0.2em;
+    text-align: center;
+}
+#gameContent {
+    padding: 2em;
+    height: 100vh;
+    text-align: center;
+    button {
+        background: white;
+        color: $sec-color;
+        border: 5px solid $sec-color;
+        padding: 3em;
+    }
+}
+.time-left {
+    font-size: 2em;
+}
+.current-player {
+    font-size: 3em;
+}

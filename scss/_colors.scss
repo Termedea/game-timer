@@ -1,0 +1,32 @@
+$main-color: rgb(206, 216, 241);
+$sec-color: rgb(32, 19, 56);
+$red: rgb(134, 33, 33);
+$green: rgb(46, 165, 42);
+$yellow: rgb(165, 153, 42);
+$purple: rgb(165, 42, 165);
+$brown: rgb(95, 57, 26);
+
+.color-red {
+    background-color: $red;
+    color: white;
+}
+
+.color-green {
+    background-color: $green;
+}
+
+.color-black {
+    background-color: black;
+}
+
+.color-yellow {
+    background-color: $yellow;
+}
+
+.color-purple {
+    background-color: $purple;
+}
+
+.color-brown {
+    background: $brown;
+}

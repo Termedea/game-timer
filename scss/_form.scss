@@ -1,0 +1,48 @@
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    display: 100%;
+    margin: 1em 0;
+}
+.btn-container {
+    width: 100%;
+    text-align: center;
+}
+
+.form-label-pair {
+    width: 100%;
+    padding: 0.3em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+input[type="number"],
+input,
+select {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+input,
+select,
+input[type="number"] {
+    border-radius: 0.5em;
+    font-size: 0.8em;
+    padding: 0.5em;
+    border: 1px solid $sec-color;
+    font-family: $main-font-family;
+}
+
+button {
+    min-width: 25em;
+    padding: 2em;
+    margin-top: 2em;
+    text-align: center;
+    background-color: $sec-color;
+    color: white;
+    border-radius: 1em;
+    border: 0;
+}
