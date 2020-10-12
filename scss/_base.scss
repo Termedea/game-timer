@@ -11,11 +11,12 @@ body {
 h2 {
     font-weight: normal;
 }
-.content {
+.settings-content {
     max-width: 45em;
     margin: 0 auto;
     margin-top: 5em;
 }
+
 .message {
     background: $red;
     color: white;
@@ -26,11 +27,16 @@ h2 {
     padding: 2em;
     height: 100vh;
     text-align: center;
+    .btn-container {
+        margin-top: 10em;
+    }
+    .player-div {
+        border: 1px solid #000;
+    }
     button {
         background: white;
         color: $sec-color;
         border: 5px solid $sec-color;
-        padding: 3em;
     }
 }
 .time-left {
@@ -38,4 +44,17 @@ h2 {
 }
 .current-player {
     font-size: 3em;
+}
+button {
+    font-family: $main-font-family;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 1rem;
+    min-width: 17rem;
+    margin-top: 2rem;
+    text-align: center;
+    background-color: $sec-color;
+    color: white;
+    border-radius: 1rem;
+    border: 0;
 }

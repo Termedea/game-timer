@@ -1,10 +1,7 @@
+/* #region  Base */
 const _totalTime = "total-time";
 const _perPlayerTime = "per-player-time";
-var numPlayers,
-    timerType,
-    gameTime,
-    players = [],
-    currentPlayerIndex = 0;
+
 var colorOptions = {
     "color-red": "Röd",
     "color-green": "Grön",
@@ -13,23 +10,44 @@ var colorOptions = {
     "color-purple": "Lila",
     "color-brown": "Brun",
 };
-var elemPlayers = document.getElementById("numPlayers");
-var elemTimer = document.getElementById("timerType");
+var elemMessage = document.getElementById("message");
+/* #endregion */
+
+/* #region  Game params */
+var numPlayers,
+    gameTimer = { timerType: "", time: 0 },
+    players = [],
+    currentPlayerIndex = 0,
+    intervalId;
+/* #endregion */
+
+/* #region  Elements & listeners for settings */
+var elemNumPlayers = document.getElementById("numPlayers");
+var elemTimerType = document.getElementById("timerType");
 var elemTime = document.getElementById("time");
 var elemPlayerDetails = document.getElementById("playerDetails");
 var elemSettingsContent = document.getElementById("settingsContent");
 var elemGameContent = document.getElementById("gameContent");
 var elemBtnContainer = document.getElementById("btnContainer");
-var elemMessage = document.getElementById("message");
-var elemCurrentPlayerName = document.getElementById("currentPlayerName");
-var elemTimeLeft = document.getElementById("timeLeft");
 
 var btnSaveSettings = document.getElementById("saveSettings");
-var btnStartGame = document.getElementById("startGame");
-var btnNextPlayer = document.getElementById("nextPlayer");
-
 btnSaveSettings.addEventListener("click", settingsSaved, false);
+var btnStartGame = document.getElementById("startGame");
 btnStartGame.addEventListener("click", initGame, false);
+/* #endregion */
+
+/* #region Elements & listeners for game */
+var elemCurrentPlayerName = document.getElementById("currentPlayerName");
+var elemTimeLeft = document.getElementById("timeLeft");
+var btnReset = document.getElementById("reset");
+btnReset.addEventListener("click", function () {
+    gameTime = 0;
+});
+var btnExit = document.getElementById("exit");
+btnExit.addEventListener("click", exitGame);
+
+/* #endregion */
+
 document.addEventListener("keypress", function (e) {
     if (e.keyCode == 13) {
         settingsSaved(e);
@@ -38,21 +56,12 @@ document.addEventListener("keypress", function (e) {
 
 function settingsSaved(e) {
     e.preventDefault();
-
-    if (
-        elemPlayers.value == "" ||
-        elemTimer.value == "" ||
-        elemTime.value == ""
-    ) {
-        elemMessage.classList.remove("hidden");
-        elemMessage.innerHTML = "<p>Fyll i alla fält.</p>";
-
-        return false;
+    if (validateBaseSettings()) {
+        elemMessage.classList.add("hidden");
+        numPlayers = elemNumPlayers.options[elemNumPlayers.selectedIndex].value;
+        renderPlayerSettings(numPlayers);
+        elemBtnContainer.classList.remove("hidden");
     }
-    elemMessage.classList.add("hidden");
-    numPlayers = elemPlayers.options[elemPlayers.selectedIndex].value;
-    renderPlayerSettings(numPlayers);
-    elemBtnContainer.classList.remove("hidden");
 }
 
 function renderPlayerSettings(numPlayers) {
@@ -85,7 +94,6 @@ function renderPlayerSettings(numPlayers) {
 
         for (var key in colorOptions) {
             var option = document.createElement("option");
-            option.name = key;
             option.value = key;
             option.text = colorOptions[key];
             elemPlayerColor.appendChild(option);
@@ -93,7 +101,7 @@ function renderPlayerSettings(numPlayers) {
 
         elemPlayerDiv.appendChild(elemPlayerTitle);
         elemPlayerDiv.appendChild(elemFormLabel);
-
+        btnStartGame.classList.remove("hidden");
         elemFormLabel.appendChild(elemPlayerNameLabel);
         elemFormLabel.appendChild(elemPlayerName);
         elemFormLabel.appendChild(elemPlayerColorLabel);
@@ -104,33 +112,41 @@ function renderPlayerSettings(numPlayers) {
 
 function initGame(e) {
     e.preventDefault();
+    if (validateBaseSettings()) {
+        elemSettingsContent.classList.add("hidden");
+        elemGameContent.classList.remove("hidden");
+        elemGameContent.addEventListener("click", nextPlayer);
 
+        play();
+    }
+}
+function setUpTimer() {
+    if (
+        elemTime.value != "" &&
+        elemTimerType[elemTimerType.selectedIndex].value != ""
+    ) {
+        gameTimer.timerType = elemTimerType[elemTimerType.selectedIndex].value;
+        gameTimer.time = elemTime.value * 60;
+    }
+    console.log(gameTimer.time);
+    console.log(gameTimer.timerType);
+}
+
+function setUpPlayers() {
     const inputIndex = 1;
     const colorIndex = 3;
     var playerData;
     var playerName;
     var playerColor;
-    var playerTime;
-
-    if (elemTime.value != "") {
-        gameTime =
-            elemTimer[elemTimer.selectedIndex].value == _totalTime
-                ? elemTime.value
-                : 0;
-        playerTime =
-            elemTimer[elemTimer.selectedIndex].value == _perPlayerTime
-                ? elemTime.value
-                : -1;
-    }
-    console.log("game: " + gameTime + " player: " + playerTime);
-
     for (var i = 0; i < numPlayers; i++) {
         playerData = elemPlayerDetails.childNodes[i].getElementsByClassName(
             "form-label-pair"
         );
         for (var j = 0; j < playerData.length; j++) {
-            playerName = playerData[j].childNodes[inputIndex].value;
-            playerColor = playerData[j].childNodes[colorIndex].value;
+            /* playerName = playerData[j].childNodes[inputIndex].value;
+            playerColor = playerData[j].childNodes[colorIndex].value; */
+            playerName = "Spelare " + (i + 1);
+            playerColor = Object.keys(colorOptions)[i];
 
             if (playerName == "" || playerColor == "") {
                 elemMessage.classList.remove("hidden");
@@ -140,28 +156,31 @@ function initGame(e) {
             }
 
             elemMessage.classList.add("hidden");
+
             players[i] = {
                 name: playerName,
                 color: playerColor,
-                timeLeft: playerTime,
+                timeLeft: 0,
             };
-
-            console.log(players);
         }
     }
-
-    elemSettingsContent.classList.add("hidden");
-    elemGameContent.classList.remove("hidden");
-    btnNextPlayer.addEventListener("click", nextPlayer);
-    run();
 }
-function run() {
-    console.log("cpi " + currentPlayerIndex);
+
+function startTimer() {
+    /* Sätt rätt timer, starta spelet */
+}
+function play() {
+    setUpTimer();
+    setUpPlayers();
+
     currentPlayer = players[currentPlayerIndex];
     elemCurrentPlayerName.innerHTML = currentPlayer.name;
-
     elemGameContent.className = currentPlayer.color;
+
+    intervalId = setInterval(updateTime, 100);
+    //startTimer();
 }
+function updateTime() {}
 
 function nextPlayer() {
     if (currentPlayerIndex < numPlayers - 1) {
@@ -170,5 +189,33 @@ function nextPlayer() {
         currentPlayerIndex = 0;
     }
 
-    run();
+    play();
+}
+function exitGame() {
+    numPlayers = 0;
+    gameTime = 0;
+    players = [];
+    currentPlayerIndex = 0;
+
+    elemNumPlayers.value = 0;
+    elemTimerType.value = 0;
+    elemPlayerDetails.innerHTML = "";
+    elemTime.value = "";
+    elemSettingsContent.classList.remove("hidden");
+    elemGameContent.classList.add("hidden");
+    btnStartGame.classList.add("hidden");
+}
+
+function validateBaseSettings() {
+    if (
+        elemNumPlayers.value == "" ||
+        elemTimerType.value == "" ||
+        elemTime.value == ""
+    ) {
+        elemMessage.classList.remove("hidden");
+        elemMessage.innerHTML = "<p>Fyll i alla fält.</p>";
+
+        return false;
+    }
+    return true;
 }
